@@ -16,7 +16,7 @@
                 current = namespaces.length > 0 ? window[ns[0]] : window;
 
             if (current === undefined) {
-                current = window[ns[0]] = {};
+                current = Mix[ns[0]] = {};
             }
 
             for (var i = 1; i < ns.length; ++i) {
@@ -149,7 +149,7 @@
                 for (i = 0; i < this._download.length; i++) {
                     unresolved.push(this._download[i].name);
                 }
-                throw ('Unresolved (circular?) dependencies: ' + unresolved.join(', '));
+               // console.log('Unresolved (circular?) dependencies: ' + unresolved.join(', '));
             }
         },
         onProgress: function (count, val){

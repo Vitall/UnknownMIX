@@ -1,4 +1,4 @@
-Mix.define('EventManager', {
+Mix.define('base.Event', {
     subscribers: {},
     on: function (subscriber, events){
         for (var i in events) {
