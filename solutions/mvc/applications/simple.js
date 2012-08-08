@@ -3,16 +3,17 @@
 Mix.define('applications.Simple', {
     
     router : false,
-    layouts : false, 
-    events : false,
     
     init:function () {
         
+     /*Пример динамической загрузки во время выполнения функции*/   
      var routerName = 'Router';
      
-     Mix.module({requires: ['base.mvc.'+routerName]});
+     Mix.module({requires: ['base.mvc.'+routerName]});//вместо динамической загрузки
+     
      this.router = new Mix.base.mvc[routerName]('http://localhost/UMix/solutions/mvc');
      this._setRouter();
+   
    
      $(window).keypress( function(){ this.router.go('/go')}.bind(this)  );
      
@@ -20,13 +21,15 @@ Mix.define('applications.Simple', {
     },
     
     _setRouter : function(){
+        
         this.router.addRules({
+            
          events : {
              "goEvent" : function(){
                  alert('And we go');
              }
          },
-         
+         /* Rule : event */
          routing : {
              "/go" : "goEvent"
          }

@@ -42,20 +42,23 @@ Mix.define('base.mvc.Router', {
        
    },
    
-   //TODO 
+   
    removeCallback : function(event,id){
-       
+       if(this.callbacks[event] === undefined){
+           return false;
+       }
+       if(this.callbacks[event][id] === undefined){
+           
+       }
+       delete this.callbacks[event][id];
+       return true;
    },
    
    //TODO прослушивает события навигации браузера
    _listenBrowser : function(){
-   /*  $(window).bind( "popstate",function(e){
-        console.log(e);
+     $(window).bind( "popstate",function(e){
+        alert('кнопки браузера в реализации');
      }.bind(this));
-     
-     $( window ).bind( "pushstate",function(e){
-        //this.fire('forward',e);
-     }.bind(this));  */
    },
    
    //Вызывает события и их слушателей 
