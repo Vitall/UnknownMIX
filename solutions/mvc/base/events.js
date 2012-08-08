@@ -1,5 +1,6 @@
 Mix.define('base.Event', {
-    subscribers: {},
+    EventSubscribers: {},
+    Events : [],
     on: function (subscriber, events){
         for (var i in events) {
             if (!this.subscribers[events[i]]) {
@@ -21,7 +22,7 @@ Mix.define('base.Event', {
         return this;
     },
     
-    clearEvents: function (){
+    clearSubscribers: function (){
         this.subscribers = {};
         return this;
     },
