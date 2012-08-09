@@ -6,6 +6,7 @@
         nocache: false,
         path: {},
         synchronous: false,
+        multiextended: true,
         //----------private members---------
         _count: 0,
         _loadingCount: 0,
@@ -82,27 +83,40 @@
 
             if (config.extend != undefined) {
                 
-                /*if(typeof config.extend == 'string'){
+                if(typeof config.extend == 'string'){
                     config.extend = [config.extend];
-                }*/
-              /*  var pathParents = [];
+                }
+                var pathParents = [];
                 var parentsClassName = [];
-                var parentsClassNamespace = [];*/
-               // for(var i in config.extend){
-                    requires.push(config.extend);
-                    var pathParent = config.extend.split('.');
-                    var parentClassName = pathParent[pathParent.length - 1];
-                     var parentClassNamespace = this.namespace(pathParent.slice(0, pathParent.length - 1).join('.'));
-               // }
+                var parentsClassNamespace = [];
+                for(var i in config.extend){
+                    var extend = config.extend[i];
+                 
+                    requires.push(config.extend[i]);
+                    
+                     pathParents[i] = config.extend[i].split('.');
+                     parentsClassName[i] = pathParents[i][pathParents[i].length - 1];
+                     parentsClassNamespace[i] = this.namespace(pathParents[i].slice(0, pathParents[i].length - 1).join('.'));
+                   
+                }
              }
 
             Mix.module({
                 name: classPath,
                 requires: requires,
                 body: function (){
-                    var parent = parentClassNamespace && parentClassNamespace[parentClassName] || Mix.Class,
-                        newClass = parent.create(config);
-
+                    var parents = {},
+                        newClass = Mix.Class.create(config);
+                        
+                        for(var i in parentsClassNamespace){
+                            parents[i] = parentsClassNamespace[i] && parentsClassNamespace[i][parentsClassName[i]] || Mix.Class;
+                            var tmp = newClass.prototype;
+                            newClass =   parents[i].create(config);
+                            newClass.prototype =  Mix.mixer(newClass.prototype,tmp);
+                        } 
+                     
+                        
+                        
                     //добавляю статические функции
                     for (var f in config) {
                         if (!config.hasOwnProperty(f)) continue;
@@ -299,6 +313,12 @@
                 requires = [requires];
             }
             Mix.config({synchronous: false,  nocache: false}).module({requires: requires});
+        },
+        mixer : function(a,b){
+            for (var i in b) {
+                a[i] = b[i];
+            }
+            return a;
         }
 
     };
@@ -319,7 +339,6 @@
         initializing = true;
         var prototype = new this();
         initializing = false;
-
         // Copy the properties over onto the new prototype
         for (var name in prop) {
             // Check if we're overwriting an existing function
@@ -337,7 +356,7 @@
                         // remove it when we're done executing
                         var ret = fn.apply(this, arguments);
                         this._super = tmp;
-
+                        
                         return ret;
                     };
                 })(name, prop[name]) :
@@ -352,7 +371,7 @@
         }
 
         // Populate our constructed prototype object
-        Class.prototype = prototype;
+        Class.prototype = Mix.mixer(Class.prototype,prototype);
 
         // Enforce the constructor to be what we expect
         Class.prototype.constructor = Class;
@@ -403,7 +422,7 @@
         }
     }
 
-    
+  
 })();
 
 

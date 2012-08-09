@@ -1,4 +1,4 @@
-Mix.define('base.Event', {
+Mix.define('base.Events', {
     EventSubscribers: {},
     Events : [],
     on: function (subscriber, events){

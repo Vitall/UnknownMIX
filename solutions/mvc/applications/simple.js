@@ -1,7 +1,6 @@
 Mix.define('applications.Simple', {
     
     router : false,
-    
     init:function () {
         
      /*Пример динамической загрузки во время выполнения функции*/   
@@ -12,7 +11,7 @@ Mix.define('applications.Simple', {
      this._setRouter();
    
    
-     $(window).keypress( function(){ this.router.go('/go')}.bind(this)  );
+     $(window).keypress( function(){this.router.go('/go')}.bind(this)  );
      
         
     },
