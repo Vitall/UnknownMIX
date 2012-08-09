@@ -12,6 +12,10 @@ Mix.define('base.mvc.Model', {
     
     aValidate : function(){
         
+    },
+    
+    imModel : function(){
+        alert('Yeah');
     }
     
 

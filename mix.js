@@ -1,6 +1,7 @@
-//TODO: добавить namespace
+
 (function (){
     Mix = {
+        namespace : {},
         //------------config----------
         nocache: false,
         path: {},
@@ -10,13 +11,14 @@
         _loadingCount: 0,
         _modules: {},
         _download: [],
+        
         //----------public functions--------
         namespace: function (namespaces){
             var ns = namespaces.split('.'),
-                current = namespaces.length > 0 ? window[ns[0]] : window;
+                current = namespaces.length > 0 ? Mix.namespace[ns[0]] : Mix.namespace;
 
             if (current === undefined) {
-                current = Mix[ns[0]] = {};
+                current = Mix.namespace[ns[0]] = {};
             }
 
             for (var i = 1; i < ns.length; ++i) {
@@ -24,12 +26,20 @@
             }
             return current;
         },
-        getClassName: function (classPath){
-            var path = classPath.split('.');
-            return path[path.length - 1];
-        },
         $: function (selector){
-            return selector.charAt(0) == '#' ? document.getElementById(selector.substr(1)) : document.getElementsByTagName(selector);
+            var action = selector[0],
+            el = false;
+            switch(action){
+                case '#' :
+                    el = document.getElementById(selector.substr(1))
+                    break
+                case '.' :
+                    el = document.getElementsByClass(selector.substr(1))
+                    break
+                default:
+                    el = document.getElementsByTagName(selector)
+            }
+            return el;
         },
         apply: function (o, c, defaults){
             // no "this" reference for friendly out of scope calls
@@ -71,11 +81,20 @@
             var classNamespace = this.namespace(path.slice(0, path.length - 1).join('.'));
 
             if (config.extend != undefined) {
-                requires.push(config.extend);
-                var pathParent = config.extend.split('.');
-                var parentClassName = pathParent[pathParent.length - 1];
-                var parentClassNamespace = this.namespace(pathParent.slice(0, pathParent.length - 1).join('.'));
-            }
+                
+                /*if(typeof config.extend == 'string'){
+                    config.extend = [config.extend];
+                }*/
+              /*  var pathParents = [];
+                var parentsClassName = [];
+                var parentsClassNamespace = [];*/
+               // for(var i in config.extend){
+                    requires.push(config.extend);
+                    var pathParent = config.extend.split('.');
+                    var parentClassName = pathParent[pathParent.length - 1];
+                     var parentClassNamespace = this.namespace(pathParent.slice(0, pathParent.length - 1).join('.'));
+               // }
+             }
 
             Mix.module({
                 name: classPath,
@@ -267,6 +286,19 @@
             script.onreadystatechange = null;
             script.onerror = null;
             return this;
+        },
+        obj : function(){
+            var args = Array.prototype.slice.call(arguments);
+            var namespace = args.shift();
+            this.autoload(namespace);
+            var clas = eval('Mix.namespace.'+namespace);
+            return new clas(args);   
+        },
+        autoload : function(requires){
+            if(typeof requires == 'string'){
+                requires = [requires];
+            }
+            Mix.config({synchronous: false,  nocache: false}).module({requires: requires});
         }
 
     };
@@ -313,10 +345,10 @@
         }
 
         // The dummy class constructor
-        function Class(){
+        function Class(args){
             // All construction is actually done in the init method
             if (!initializing && this.init)
-                this.init.apply(this, arguments);
+                this.init.apply(this, args);
         }
 
         // Populate our constructed prototype object
@@ -330,7 +362,11 @@
 
         return Class;
     };
-
+    
+    
+    
+/*cross browser solutions*/
+// .bind(context)
     Function.prototype.bind = function (scope){
         var _function = this;
 
@@ -338,4 +374,36 @@
             return _function.apply(scope, arguments);
         }
     }
+    //getElementsByClassName
+    if(document.getElementsByClassName) {
+
+        getElementsByClass = function(classList, node) {    
+            return (node || document).getElementsByClassName(classList)
+        }
+
+    } else {
+
+        getElementsByClass = function(classList, node) {			
+            var node = node || document,
+            list = node.getElementsByTagName('*'), 
+            length = list.length,  
+            classArray = classList.split(/\s+/), 
+            classes = classArray.length, 
+            result = [], i,j
+            for(i = 0; i < length; i++) {
+                for(j = 0; j < classes; j++)  {
+                    if(list[i].className.search('\\b' + classArray[j] + '\\b') != -1) {
+                        result.push(list[i])
+                        break
+                    }
+                }
+            }
+	
+            return result
+        }
+    }
+
+    
 })();
+
+

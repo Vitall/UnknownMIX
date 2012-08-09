@@ -1,5 +1,3 @@
-
-
 Mix.define('applications.Simple', {
     
     router : false,
@@ -9,9 +7,8 @@ Mix.define('applications.Simple', {
      /*Пример динамической загрузки во время выполнения функции*/   
      var routerName = 'Router';
      
-     Mix.module({requires: ['base.mvc.'+routerName]});//вместо динамической загрузки
+     this.router = Mix.obj('base.mvc.'+routerName , 'http://localhost/UMix/solutions/mvc');
      
-     this.router = new Mix.base.mvc[routerName]('http://localhost/UMix/solutions/mvc');
      this._setRouter();
    
    

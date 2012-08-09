@@ -6,17 +6,16 @@
 </head>
 <body>
     <script src ="http://code.jquery.com/jquery.js"></script>
-<script src="../../mix-min.js"></script>
+<script src="../../mix.js"></script>
 <script>
     Mix.config({
         synchronous: false,
         nocache: false
     }).module({
                 name: 'main',
-                requires: ['applications.Simple'],
                 app : false,
                 body: function (){
-                    this.app = new Mix.applications.Simple(); 
+                    this.app = Mix.obj('applications.Simple'); 
                 }
             });
            
