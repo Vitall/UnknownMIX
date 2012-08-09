@@ -12,6 +12,10 @@ Mix.define('base.mvc.Collection', {
     
     aValidate : function(){
         
+    },
+    
+    imCollection : function(){
+        alert('im collection');
     }
     
 

@@ -1,4 +1,3 @@
-
 (function (){
     Mix = {
         namespace : {},
@@ -61,7 +60,7 @@
                 default:
                     throw('Incorrect arguments');
             }
-
+            console.log('создаётся класс '+classPath);
             var path = classPath.split('.');
             var className = path[path.length - 1];
             var classNamespace = this.namespace(path.slice(0, path.length - 1).join('.'));
@@ -76,7 +75,7 @@
                 var parentsClassNamespace = [];
                 for(var i in config.extend){
                     var extend = config.extend[i];
-                 
+                    console.log('Наследуется '+extend);
                     requires.push(config.extend[i]);
                     
                      pathParents[i] = config.extend[i].split('.');
@@ -100,8 +99,6 @@
                             newClass.prototype =  Mix.apply(newClass.prototype,tmp);
                         } 
                      
-                        
-                        
                     //добавляю статические функции
                     for (var f in config) {
                         if (!config.hasOwnProperty(f)) continue;
@@ -167,13 +164,13 @@
                 for (i = 0; i < this._download.length; i++) {
                     unresolved.push(this._download[i].name);
                 }
-               
+               // console.log('Unresolved (circular?) dependencies: ' + unresolved.join(', '));
             }
         },
         onProgress: function (count, val){
             if (count <= 0) return;
             var p = val * 100 / count;
-            
+            //console.log('progress: ' + Math.round(p) + '%');//debug
         },
         loadScript: function (name, requiredFrom, pathName){
             var prefix = '';
@@ -275,8 +272,8 @@
                     onLoadFn();
                 }
             };
-            document.getElementsByTagName('head')[0].appendChild(script);
 
+            document.getElementsByTagName('head')[0].appendChild(script);
             return script;
         },
         cleanupScriptElement: function (script){
@@ -288,6 +285,7 @@
         obj : function(){
             var args = Array.prototype.slice.call(arguments);
             var namespace = args.shift();
+            console.log('Создаётся объект класса ' + namespace);
             this.autoload(namespace);
             var clas = eval('Mix.namespace.'+namespace);
             return new clas(args);   
@@ -296,7 +294,9 @@
             if(typeof requires == 'string'){
                 requires = [requires];
             }
-            
+            for(var i in requires){
+                console.log('Запрос на динамическую загрузку ' + requires[i]);
+            }
             Mix.config({synchronous: false,  nocache: false}).module({requires: requires});
         }
 
