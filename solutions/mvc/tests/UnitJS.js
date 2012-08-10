@@ -55,7 +55,7 @@ Mix.define('tests.UnitJS', {
        var i = 0;
        for(i in this){
           if(i.substr(0,4) == 'test'){
-              this.activeTestName = i;
+              this.activeTestName = i.substr(4);
               this[i]();
           }
        }

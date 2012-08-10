@@ -8,7 +8,7 @@ Mix.define('tests.SimpleApp', {
         testSimple : function(){
           
             this.assertType('Hello World','string','Тестовая проверка ,должна быть зелёной ');
-            this.assertType(1241,'integer','Тестовая проверка,должна быть красной ');
+            //this.assertType(1241,'integer','Тестовая проверка,должна быть красной ');
             
             //this.assert(1244,'sdfsdklc','Провальный тест');
             
@@ -22,3 +22,6 @@ Mix.define('tests.SimpleApp', {
         
 });
 
+var tester =  Mix.obj('tests.SimpleApp'); 
+tester.setConsole('console');
+tester.start();

@@ -6,13 +6,11 @@
 </head>
 <body>
     <div id="console"></div>
-    <script src ="http://code.jquery.com/jquery.js"></script>
+    <script src ="http://code.jquery.com/jquery.min.js"></script>
 <script src="../../mix-debug.js"></script>
 <script>
     
-     var tester =  Mix.obj('tests.SimpleApp'); 
-     tester.setConsole('console');
-     tester.start();
+    Mix.autoload('tests.simpleApp');
 
 </script>
 </body>

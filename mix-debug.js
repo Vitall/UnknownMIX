@@ -299,6 +299,7 @@
             console.log('Создаётся объект класса ' + namespace);
             this.autoload(namespace);
             var clas = eval('Mix.namespace.'+namespace);
+            console.log('Завершение создания объекта класса ' + namespace);
             return new clas(args);   
         },
         autoload : function(requires){
@@ -306,9 +307,12 @@
                 requires = [requires];
             }
             for(var i in requires){
-                console.log('Запрос на динамическую загрузку ' + requires[i]);
+                console.log('Запрос на динамическую загрузку: ' + requires[i]);
             }
             Mix.config({synchronous: false,  nocache: false}).module({requires: requires});
+            for(var i in requires){
+                console.log('Завершение динамической загрузки: ' + requires[i]);
+            }
         }
 
     };

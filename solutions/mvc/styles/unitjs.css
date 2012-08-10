@@ -37,16 +37,30 @@
 }
 
 .xunit_console{
+    padding-top: 300px;
     margin-left : 10%;
     height: 100%;
     width: 80%;
+    background-image: url('http://habrastorage.org/storage2/de9/dc2/580/de9dc25809153c2571c666cd6e48e4a8.png');
+    background-repeat: no-repeat;
+    background-size: 300px;
+    background-position-x: 50%;
 }
 
 .xunit_end_true{
-    background-color :greenyellow;
+    background-image: url('http://www.salonkallis.com/sitebuilder/images/img_green_box-390x195.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    color:blue;
+    padding-left: 20%;
+    
 }
 .xunit_end_false{
-    background-color:red;
+    background-image: url('http://www.robertwilsonpartnership.com/Images/Red-Box-Background.png');
+    background-repeat: no-repeat;
+    background-size: cover;
+    color:white;
+    padding-left: 20%;
 }
 
 .xunit_end_trues{
