@@ -14,7 +14,7 @@ Mix.define('base.mvc.Model', {
     },
     
     imModel : function(){
-        alert('Yeahh');
+        console.log('im model');
     },
     
     

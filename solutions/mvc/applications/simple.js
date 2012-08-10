@@ -1,13 +1,11 @@
 Mix.define('applications.Simple', {
     
+    
     router : false,
     init:function () {
-        
-     /*Пример динамической загрузки во время выполнения функции*/   
+     
      var routerName = 'Router';
-     
      this.router = Mix.obj('base.mvc.'+routerName , 'http://localhost/UMix/solutions/mvc');
-     
      this._setRouter();
    
    
@@ -31,6 +29,11 @@ Mix.define('applications.Simple', {
          }
          
      });
-    }
+    }, 
+   
+   //For UnitJS
+   isApplication : function(){
+       return true;
+   }
 
 }); 

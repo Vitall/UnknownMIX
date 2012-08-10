@@ -1,6 +1,14 @@
-/* 
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
-
+Mix.define('ui.base.Component', {
+    
+   
+    
+    init:function (el) {
+        if(el !== undefined){
+            this.el = el;
+        }
+    }, 
+    
+    
+    
+    
+}); 

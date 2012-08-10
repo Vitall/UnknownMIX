@@ -15,7 +15,7 @@ Mix.define('base.mvc.Collection', {
     },
     
     imCollection : function(){
-        alert('im collection');
+        console.log('im collection');
     }
     
 

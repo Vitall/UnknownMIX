@@ -1,0 +1,62 @@
+.xunit_result_true{
+    margin-bottom: 10px;
+    padding-left: 150px;
+    min-height: 150px;
+    background-image: url('http://www.healthdoes.com/wp-content/uploads/2012/07/Benefits-of-Green-Apples.jpg');
+    background-repeat: no-repeat;
+    background-position: left;
+    background-size: 150px;  
+}
+.xunit_result_false{
+    margin-bottom: 10px;
+    padding-left: 150px;
+    min-height: 150px;
+    background-image: url('http://www.art-pen.ru/wp-content/uploads/2011/08/tomato.jpg');
+    background-repeat: no-repeat;
+    background-position: left;
+    background-size: 150px;
+}
+
+.xunit_message{
+   font-size: 18px;
+   width: 100%;
+   margin-left: 10%;
+   overflow: hidden;
+}
+
+
+
+.xunit_vars div{
+    float: left;
+    width: 40%;
+    height: 100px;
+    background-color: whitesmoke;
+    margin-left: 5%;
+    overflow-style: scrollbar;
+    padding-left:  35px;
+}
+
+.xunit_console{
+    margin-left : 10%;
+    height: 100%;
+    width: 80%;
+}
+
+.xunit_end_true{
+    background-color :greenyellow;
+}
+.xunit_end_false{
+    background-color:red;
+}
+
+.xunit_end_trues{
+     font-size: 25px;
+     
+}
+.xunit_end_falses{
+     font-size: 25px;
+    
+}
+.xunit_end_progress{
+    font-size: 25px;
+}

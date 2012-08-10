@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>UMix XUnit example</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+</head>
+<body>
+    <div id="console"></div>
+    <script src ="http://code.jquery.com/jquery.js"></script>
+<script src="../../mix-debug.js"></script>
+<script>
+    
+     var tester =  Mix.obj('tests.SimpleApp'); 
+     tester.setConsole('console');
+     tester.start();
+
+</script>
+</body>
+</html>

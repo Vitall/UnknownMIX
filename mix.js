@@ -1,4 +1,4 @@
-
+//TODO multiextended: true,
 (function (){
     Mix = {
         namespace : {},
@@ -206,6 +206,19 @@
                 }, this)
             }
         },
+        
+        loadStyle : function(name){
+           
+            var url = name.replace(/\./g, '/') + '.css';
+            var element = document.createElement('link');
+                element.type = 'text/css';
+                element.rel = 'stylesheet';
+                element.href = url;
+             
+             document.getElementsByTagName('head')[0].appendChild(element);
+             
+        },
+        
         loadXHRScript: function (url, onLoad, onError, scope){
             var isCrossOriginRestricted = false,
                 fileName = url.split('/').pop(),
