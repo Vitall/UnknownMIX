@@ -44,7 +44,7 @@
     background-image: url('http://habrastorage.org/storage2/de9/dc2/580/de9dc25809153c2571c666cd6e48e4a8.png');
     background-repeat: no-repeat;
     background-size: 300px;
-    background-position-x: 50%;
+    background-position:top;
 }
 
 .xunit_end_true{

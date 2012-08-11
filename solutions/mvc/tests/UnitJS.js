@@ -4,8 +4,18 @@ Mix.define('tests.UnitJS', {
     console : false,
     activeTestName : '',
     
+    fixture : {},
     
-    init : function(){
+    setUp : function(){
+        
+    },
+    
+    tearDown : function(){
+        
+    },
+    
+    setFixture : function(obj){
+        this.fixture = obj;
     },
     
     assert : function(a,b,message){
@@ -49,6 +59,7 @@ Mix.define('tests.UnitJS', {
     },
     
     start : function(){
+      this.setUp();
       this.results._true = 0;
       this.results._false = 0;
       
@@ -60,6 +71,7 @@ Mix.define('tests.UnitJS', {
           }
        }
        this.showEnd();
+       this.tearDown();
     },
     
     setConsole : function(consoleId){

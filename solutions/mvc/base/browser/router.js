@@ -1,7 +1,6 @@
 
 
-Mix.define('base.mvc.Router', {
-   extend : ['base.mvc.Collection','base.mvc.Model'], //For testing
+Mix.define('base.browser.Router', {
   //Корневой путь роутинга
    root : '',
    //Роутеры в которых хранятся регулярные выражение и имя события
@@ -16,8 +15,6 @@ Mix.define('base.mvc.Router', {
      Mix.autoload(['libs.history']);
      this.root = root;
      this._listenBrowser();
-     this.imCollection();
-     this.imModel();
    },
    
    //Добавляет события и правила роутинга

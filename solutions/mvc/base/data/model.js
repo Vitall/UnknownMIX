@@ -1,4 +1,4 @@
-Mix.define('base.mvc.Model', {
+Mix.define('base.data.Model', {
     attributes : {},
     
     init : function(options){
@@ -11,11 +11,7 @@ Mix.define('base.mvc.Model', {
     
     aValidate : function(){
         
-    },
-    
-    imModel : function(){
-        console.log('im model');
-    },
+    }
     
     
     
