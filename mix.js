@@ -1,12 +1,12 @@
-//TODO multiextended: true,
 (function (){
     Mix = {
         namespace : {},
         //------------config----------
-        nocache: false,
+        cache: true,
         path: {},
         synchronous: false,
         multiextended: true,
+        debug : false,
         //----------private members---------
         _count: 0,
         _loadingCount: 0,
@@ -42,6 +42,25 @@
         config: function (config){
             return this.apply(this, config);
         },
+        log : function(){
+            Mix._console('log',arguments);
+        },
+        info : function(){
+            Mix._console('info',arguments);
+        },
+        warning : function(){
+            Mix._console('warn',arguments);
+        },
+        error : function(){
+            Mix._console('error',arguments);
+        },
+        
+        _console : function(type,args){
+            if(Mix.debug == true){
+                var args = Array.prototype.slice.call(args);
+                console[type].apply(console,args);
+            }
+        },
         define: function (){
             var classPath = '',
                 requires = [],
@@ -61,7 +80,7 @@
                 default:
                     throw('Incorrect arguments');
             }
-
+            Mix.info('создаётся класс '+classPath);
             var path = classPath.split('.');
             var className = path[path.length - 1];
             var classNamespace = this.namespace(path.slice(0, path.length - 1).join('.'));
@@ -76,7 +95,7 @@
                 var parentsClassNamespace = [];
                 for(var i in config.extend){
                     var extend = config.extend[i];
-                 
+                    Mix.info('Наследуется '+extend);
                     requires.push(config.extend[i]);
                     
                      pathParents[i] = config.extend[i].split('.');
@@ -93,15 +112,19 @@
                     var parents = {},
                         newClass = Mix.Class.create(config);
                         
+                       
+                        
                         for(var i in parentsClassNamespace){
+                            if(parentsClassNamespace.length > 1 && Mix.multiextended == false){
+                                Mix.error("Множественное наследование отключено , попытка унаследовать несколько классов - " +classPath);
+                                return false;
+                            }
                             parents[i] = parentsClassNamespace[i] && parentsClassNamespace[i][parentsClassName[i]] || Mix.Class;
                             var tmp = newClass.prototype;
                             newClass =   parents[i].create(config);
                             newClass.prototype =  Mix.apply(newClass.prototype,tmp);
                         } 
                      
-                        
-                        
                     //добавляю статические функции
                     for (var f in config) {
                         if (!config.hasOwnProperty(f)) continue;
@@ -167,13 +190,13 @@
                 for (i = 0; i < this._download.length; i++) {
                     unresolved.push(this._download[i].name);
                 }
-               
+               // Mix.log('Unresolved (circular?) dependencies: ' + unresolved.join(', '));
             }
         },
         onProgress: function (count, val){
             if (count <= 0) return;
             var p = val * 100 / count;
-            
+            //Mix.log('progress: ' + Math.round(p) + '%');//debug
         },
         loadScript: function (name, requiredFrom, pathName){
             var prefix = '';
@@ -181,7 +204,7 @@
                 if (!(prefix = this.path[pathName])) throw('Undefined path: ' + pathName);
                 prefix += prefix.indexOf(prefix.length - 1) == '/' ? '' : '/';
             }
-            var url = prefix + name.replace(/\./g, '/') + '.js' + (this.nocache ? '?nocache=' + new Date().getTime() : '');
+            var url = prefix + name.replace(/\./g, '/') + '.js' + ( ( ! this.cache ) ? '?nocache=' + new Date().getTime() : '');
             this._modules[name] = {
                 name: name,
                 requires: [],
@@ -206,7 +229,6 @@
                 }, this)
             }
         },
-        
         loadStyle : function(name){
            
             var url = name.replace(/\./g, '/') + '.css';
@@ -214,11 +236,10 @@
                 element.type = 'text/css';
                 element.rel = 'stylesheet';
                 element.href = url;
-             
+             Mix.info('загрузка стиля по url: ' + url);
              document.getElementsByTagName('head')[0].appendChild(element);
              
         },
-        
         loadXHRScript: function (url, onLoad, onError, scope){
             var isCrossOriginRestricted = false,
                 fileName = url.split('/').pop(),
@@ -288,8 +309,8 @@
                     onLoadFn();
                 }
             };
-            document.getElementsByTagName('head')[0].appendChild(script);
 
+            document.getElementsByTagName('head')[0].appendChild(script);
             return script;
         },
         cleanupScriptElement: function (script){
@@ -301,22 +322,29 @@
         obj : function(){
             var args = Array.prototype.slice.call(arguments);
             var namespace = args.shift();
+            Mix.log('Создаётся объект класса ' + namespace);
             this.autoload(namespace);
             var clas = eval('Mix.namespace.'+namespace);
+            Mix.log('Завершение создания объекта класса ' + namespace);
             return new clas(args);   
         },
         autoload : function(requires){
             if(typeof requires == 'string'){
                 requires = [requires];
             }
-            
-            Mix.config({synchronous: false,  nocache: false}).module({requires: requires});
+            for(var i in requires){
+                Mix.info('Запрос на динамическую загрузку: ' + requires[i]);
+            }
+            Mix.config({synchronous: false,  cache: true}).module({requires: requires});
+            for(var i in requires){
+                Mix.info('Завершение динамической загрузки: ' + requires[i]);
+            }
         }
 
     };
 
     var initializing = false, fnTest = /xyz/.test(function (){
-        xyz;
+   
     }) ? /\b_super\b/ : /.*/;
     // The base Class implementation (does nothing)
     Mix.Class = function (){

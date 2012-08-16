@@ -6,11 +6,13 @@
 </head>
 <body>
     <script src ="http://code.jquery.com/jquery.min.js"></script>
-<script src="../../mix-min.js"></script>
+<script src="../../mix.js"></script>
 <script>
     Mix.config({
         synchronous: false,
-        nocache: false
+        cache: true,
+        debug : false,
+        multiextended : true
     }).module({
                 name: 'main',
                 app : false,
@@ -18,7 +20,6 @@
                     this.app = Mix.obj('applications.Simple'); 
                 }
             });
-           
 </script>
 </body>
 </html>

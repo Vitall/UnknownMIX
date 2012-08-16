@@ -33,7 +33,11 @@ class testRouter{
 <body>
     <div id="console"></div>
     <script src ="http://code.jquery.com/jquery.min.js"></script>
-<script src="../../mix-debug.js"></script>
+<script src="../../mix.js"></script>
+
+ Mix.config({
+        debug : true,
+    })
 
 <?php 
 
