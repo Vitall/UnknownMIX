@@ -11,13 +11,14 @@
     Mix.config({
         synchronous: false,
         cache: true,
-        debug : false,
+        debug : true,
         multiextended : true
     }).module({
                 name: 'main',
                 app : false,
                 body: function (){
                     this.app = Mix.obj('applications.Simple'); 
+                    console.log(Mix.isFace(this.app,['applications.IPartZ']));
                 }
             });
 </script>

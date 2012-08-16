@@ -95,36 +95,72 @@
                 var parentsClassNamespace = [];
                 for(var i in config.extend){
                     var extend = config.extend[i];
-                    Mix.info('Наследуется '+extend);
-                    requires.push(config.extend[i]);
+                    Mix.info('Наследуется '+ extend);
+                    requires.push(extend);
                     
                      pathParents[i] = config.extend[i].split('.');
                      parentsClassName[i] = pathParents[i][pathParents[i].length - 1];
                      parentsClassNamespace[i] = this.namespace(pathParents[i].slice(0, pathParents[i].length - 1).join('.'));
                    
                 }
+                delete config.extend;
              }
-
+             
+             if(config.implement != undefined){
+                 if(typeof config.implement == 'string'){
+                    config.implement = [config.implement];
+                 }
+                 var faces = [];
+                 for(var i in config.implement){
+                    var face =  config.implement[i];
+                    requires.push(face);
+                     
+                    faces.push(face);
+                   
+                 }
+            }
+            var  methods = [];
+            if(config.abstract == true){
+                if(config.methods !== undefined){
+                    methods = config.methods;
+                }
+            }
+            
             Mix.module({
                 name: classPath,
                 requires: requires,
                 body: function (){
                     var parents = {},
-                        newClass = Mix.Class.create(config);
+                    newClass = Mix.Class.create(config);
                         
                        
-                        
-                        for(var i in parentsClassNamespace){
+                       for(var i in parentsClassNamespace){
                             if(parentsClassNamespace.length > 1 && Mix.multiextended == false){
                                 Mix.error("Множественное наследование отключено , попытка унаследовать несколько классов - " +classPath);
                                 return false;
                             }
                             parents[i] = parentsClassNamespace[i] && parentsClassNamespace[i][parentsClassName[i]] || Mix.Class;
+                            if(parents[i].prototype.implement !== undefined){
+                                 faces = faces.concat(parents[i].prototype.implement);
+                            }
+                            if(parents[i].prototype.abstract == true && parents[i].prototype.methods !== undefined ){
+                                 methods = methods.concat(parents[i].prototype.methods);
+                                 
+                            }
                             var tmp = newClass.prototype;
-                            newClass =   parents[i].create(config);
+                            newClass =   parents[i].create(); // config , need time-testing
                             newClass.prototype =  Mix.apply(newClass.prototype,tmp);
                         } 
-                     
+                        
+                        
+                        
+                        if(config.abstract == undefined){
+                            newClass.prototype.abstract = false;
+                        }
+                        
+                        
+                        
+                       
                     //добавляю статические функции
                     for (var f in config) {
                         if (!config.hasOwnProperty(f)) continue;
@@ -133,6 +169,31 @@
                             newClass[funcName] = config[f];
                         }
                     }
+                    if(config.abstract !== true){
+                     for(var i in faces){ 
+                            face = Mix.namespace(faces[i]);
+                            face = face.prototype;
+                            if(face.methods !== undefined){
+                                for(var j in face.methods){
+                                    if(newClass.prototype[face.methods[j]] == undefined ){
+                                        Mix.error('Метод - '+face.methods[j] + ' , объявленный в интерфейсе - '+ faces[i] + ', не реализован в классе: ' +classPath);
+                                        return false;
+                                    }
+                                }
+                            }
+                     }
+                     for(var i in methods){
+                        if(newClass.prototype[methods[i]] == undefined){
+                            Mix.error('Абстрактный метод - ' + methods[i] + ', не реализован в классе: ' + classPath);
+                            return false;
+                        }
+                     }
+                    }else{
+                       Mix.info('Абстрактный класс наследует абстрактные методы : ' + methods); newClass.prototype.methods = methods;
+                       Mix.info('Абстрактный класс наследует интерфейсы : ' + faces); newClass.prototype.implement = faces;
+                    }
+                    
+                    
                     classNamespace[className] = newClass;
                 }
             });
@@ -324,10 +385,33 @@
             var namespace = args.shift();
             Mix.log('Создаётся объект класса ' + namespace);
             this.autoload(namespace);
-            var clas = eval('Mix.namespace.'+namespace);
+            var clas = Mix.namespace(namespace); 
+            if(clas.prototype.abstract == true){
+                Mix.error('Попытка создания объекта абстрактного класса ' + namespace);
+                return false;
+            }
             Mix.log('Завершение создания объекта класса ' + namespace);
             return new clas(args);   
         },
+        
+        isFace : function(obj,interfaces){
+           if(typeof interfaces == 'string'){
+                interfaces = [interfaces];
+           }
+           
+           Mix.autoload(interfaces);
+         
+           for(var i in interfaces){
+               var face = Mix.namespace(interfaces[i]);
+               for(var j in face.prototype.methods){
+                   if(obj[face.prototype.methods[j]] == undefined){
+                       return false;
+                   }
+               }
+           }
+           return true;
+        },
+        
         autoload : function(requires){
             if(typeof requires == 'string'){
                 requires = [requires];

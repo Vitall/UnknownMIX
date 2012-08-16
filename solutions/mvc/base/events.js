@@ -1,4 +1,7 @@
 Mix.define('base.Events', {
+    
+    abstract : true,
+    
     EventSubscribers: {},
     
     on: function (subscriber, events , id){
