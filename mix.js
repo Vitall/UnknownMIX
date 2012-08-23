@@ -5,8 +5,13 @@
         cache: true,
         path: {},
         synchronous: false,
+        
         multiextended: true,
+        absrtacts: true,
+        interfaces: true,
+        
         debug : false,
+        debugPrefix : '',
         //----------private members---------
         _count: 0,
         _loadingCount: 0,
@@ -58,6 +63,7 @@
         _console : function(type,args){
             if(Mix.debug == true){
                 var args = Array.prototype.slice.call(args);
+                args.unshift(Mix.debugPrefix);
                 console[type].apply(console,args);
             }
         },
@@ -168,15 +174,19 @@
                             var funcName = f.substring(7);
                             newClass[funcName] = config[f];
                         }
-                    }
+                    }  
                     if(config.abstract !== true){
+                       
+                     if(Mix.interfaces == true) {  
                      for(var i in faces){ 
                             face = Mix.namespace(faces[i]);
                             face = face.prototype;
                             if(face.methods !== undefined){
-                                for(var j in face.methods){
+                                for(var j in face.methods){ 
                                     if(newClass.prototype[face.methods[j]] == undefined ){
-                                        Mix.error('Метод - '+face.methods[j] + ' , объявленный в интерфейсе - '+ faces[i] + ', не реализован в классе: ' +classPath);
+                                     
+                         
+                                       Mix.error('Метод - '+face.methods[j] + ' , объявленный в интерфейсе - '+ faces[i] + ', не реализован в классе: ' +classPath);
                                         return false;
                                     }
                                 }
@@ -188,6 +198,7 @@
                             return false;
                         }
                      }
+                    } 
                     }else{
                        Mix.info('Абстрактный класс наследует абстрактные методы : ' + methods); newClass.prototype.methods = methods;
                        Mix.info('Абстрактный класс наследует интерфейсы : ' + faces); newClass.prototype.implement = faces;
@@ -386,7 +397,7 @@
             Mix.log('Создаётся объект класса ' + namespace);
             this.autoload(namespace);
             var clas = Mix.namespace(namespace); 
-            if(clas.prototype.abstract == true){
+            if(clas.prototype.abstract == true && Mix.absrtacts == true){
                 Mix.error('Попытка создания объекта абстрактного класса ' + namespace);
                 return false;
             }

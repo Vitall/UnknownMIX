@@ -1,11 +1,13 @@
 Mix.define('applications.Simple', {
     
-    
-    router : false,
-    extend : ['applications.PartX','applications.PartY'],
+    extend : ['applications.PartX','applications.PartY','applications.PartZ'],
     implement : ['applications.ISimple'],
+    
+    router : null,
+    
+    
     init:function () {
-     
+    
      var routerName = 'Router';
      this.router = Mix.obj('base.browser.'+routerName , 'http://localhost/UMix/solutions/mvc');
      this._setRouter();
@@ -50,7 +52,7 @@ Mix.define('applications.Simple', {
     },
     
     sayClass : function(){
-        alert('FUCK YOU ALL');
+        alert('');
     }
 
 }); 

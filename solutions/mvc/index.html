@@ -17,8 +17,9 @@
                 name: 'main',
                 app : false,
                 body: function (){
+                   
                     this.app = Mix.obj('applications.Simple'); 
-                    console.log(Mix.isFace(this.app,['applications.IPartZ']));
+                   Mix.debugPrefix = '';
                 }
             });
 </script>
