@@ -1,63 +1,37 @@
-MIX - бибилиотека облегчающая написание модульных приложений на JavaScript
-Возможности:
-    + динамическая загрузка зависимых модулей
-    + классическое ООП от Jhon Resig
-    + динамическая загрузка наследуемых классов
+UMIX - javascript library for creating OOP applications
 
+-Absrtacts
+-Interfaces (off/on)
+-Namespaces (Lazy Load)
+- 6.5 kb -min  
+-debug 
+-multiextended (off/on)
 
-Наименование модулей(модули именуются маленькими буквами):
-    1. modulename - загрузка файла "modulename.js" из текущего каталога. Namespace = window
-    2. super.module.name - загрузка файла "name.js" из каталога "super/module/". Namespace = Super.Global
-Наименование классов(классы именуются с большой буквы):
-    1. ClassName  - загрузка файла "classname.js" из текущего каталога. Namespace = window
-    2. Super.Class.Name - Загрузка файла "name.js" из каталога "super/class/". Namespace = Super.Class
+Mix.define('pack.ClassName', {
+    
+    extend : 'pack.Super',
+    implement : ['global.ISuperFace'],
+    abstract : true,
 
-Пример определения и использования класса Point:
-//определение класса. Файл Mathematics/Geometry/Point.js
-Mix.define('Mathematics.Geometry.Point', {
-    init:function (x, y) {
-        this.x = x;
-        this.y = y;
+    //private propery
+    _secret : '...',
+
+    //global propery
+    global : '?' ,
+
+    //construct
+    init:function () {
+      
     },
-    getDistance:function (point, squared) {
-        var x = point.x - this.x,
-            y = point.y - this.y,
-            g = x * x + y * y;
-        return squared ? g : Math.sqrt(g);
-    },
-    toString:function () {
-        return "{ x:" + this.x + ", y:" + this.y + " }";
+
+    //method
+    say : function(){
+        alert("Say");
     }
-});
-//Использование класса. Файл index.html
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Mix geometry example</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-</head>
-<body>
-<script src="../../mod.js"></script>
-<script>
-    Mix.config({
-        synchronous:true,
-        path:{
-            common: '../../common'
-        },
-        nocache:false
-    }).module({
-                name:'main',
-                requires:['common:Mathematics.Geometry.Point'],
-                body:function () {
-                    var p = new Mathematics.Geometry.Point(10, 20);
-                    alert(p);
-                }
-            });
-</script>
-</body>
-</html>
 
-Path в настройках сожержит именнованные пути для альтернативной загрузки модулей/классов.
-При подключении достаточно указать имя пути отделив его от имений класса/модуля двоеточием.
-В примере выше url для загрузки класса будет такой: ../../common/Mathematics/Geometry/Point.js
+}); 
 
+For what ? 
+- http://www.amazon.com/Patterns-Enterprise-Application-Architecture-Martin/dp/0321127420
+- http://www.amazon.com/Design-Patterns-Elements-Reusable-Object-Oriented/dp/0201633612
+-  documentation , architecture .....  
