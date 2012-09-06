@@ -17,7 +17,7 @@ Mix.define('pack.ClassName', {
     //private propery
     _secret : '...',
 
-    //global propery
+    //public propery
     global : '?' ,
 
     //construct
